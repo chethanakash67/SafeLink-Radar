@@ -1,0 +1,23 @@
+{
+  "name": "ai-browser-risk-intelligence",
+  "version": "1.0.0",
+  "description": "AI Browser Link Risk Intelligence Extension - Phase 1",
+  "license": "MIT",
+  "author": "chethanakash67",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build && vite build --watch --mode development",
+    "build": "npm run build:background && npm run build:content",
+    "build:background": "vite build --config vite.config.background.ts",
+    "build:content": "vite build --config vite.config.content.ts",
+    "type-check": "tsc --noEmit",
+    "generate-icons": "node scripts/generate-icons.js"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.260",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11",
+    "vite-plugin-static-copy": "^1.0.0"
+  }
+}

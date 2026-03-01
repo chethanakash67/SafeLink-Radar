@@ -1,0 +1,348 @@
+/**
+ * Safety Panel Styles
+ * Full-page overlay for high-risk link interception
+ */
+
+.ai-risk-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  animation: overlayFadeIn 0.2s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ai-risk-panel {
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  animation: panelSlideUp 0.3s ease-out;
+}
+
+@keyframes panelSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panel-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 50%;
+  font-size: 24px;
+  line-height: 1;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel-close:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.panel-icon {
+  text-align: center;
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.panel-title {
+  margin: 0 0 20px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  text-align: center;
+}
+
+.panel-score-container {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.panel-score {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.panel-score-label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.panel-description {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4b5563;
+  text-align: center;
+}
+
+.panel-url-container {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+}
+
+.panel-url-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #92400e;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.panel-url {
+  font-size: 14px;
+  color: #78350f;
+  word-break: break-all;
+  font-family: 'Courier New', monospace;
+  line-height: 1.5;
+}
+
+.panel-reasons-container {
+  margin-bottom: 24px;
+}
+
+.panel-reasons-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.panel-reasons {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.panel-reasons li {
+  padding: 8px 0;
+  padding-left: 20px;
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.5;
+  position: relative;
+}
+
+.panel-reasons li::before {
+  content: '⚠️';
+  position: absolute;
+  left: 0;
+  font-size: 14px;
+}
+
+.panel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.panel-button {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.button-primary {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.button-primary:hover {
+  background: #2563eb;
+}
+
+.button-secondary {
+  background: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+}
+
+.button-secondary:hover {
+  background: #e5e7eb;
+}
+
+.button-danger {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.button-danger:hover {
+  background: #fee2e2;
+}
+
+.panel-details {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.panel-details h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.panel-features {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.panel-features dt {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.panel-features dd {
+  margin: 0;
+  color: #1f2937;
+  font-family: 'Courier New', monospace;
+}
+
+/* Risk level variants */
+.ai-risk-panel.risk-high .panel-icon {
+  filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.3));
+}
+
+.ai-risk-panel.risk-medium .panel-icon {
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3));
+}
+
+.ai-risk-panel.risk-low .panel-icon {
+  filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.3));
+}
+
+/* ── Safe steps section ──────────────────────────────────────────────── */
+.panel-safe-steps {
+  margin-top: 28px;
+  padding: 20px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.panel-safe-steps h3 {
+  margin: 0 0 14px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #14532d;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panel-safe-list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panel-safe-list li {
+  font-size: 14px;
+  color: #166534;
+  line-height: 1.55;
+}
+
+/* inline buttons inside each list item */
+.panel-safe-list .panel-button {
+  width: auto;
+  display: inline-block;
+  margin-top: 8px;
+  margin-right: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.panel-safe-note {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #4b7c5a;
+  font-style: italic;
+}
+
+/* Scrollbar styling */
+.ai-risk-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ai-risk-panel::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 4px;
+}
+
+.ai-risk-panel::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.ai-risk-panel::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

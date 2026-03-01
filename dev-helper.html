@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extension Auto-Reload Helper</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+        }
+        
+        h1 { margin-bottom: 20px; }
+        
+        button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            min-height: 60px;
+            font-size: 14px;
+        }
+        
+        .success { color: #10b981; font-weight: 600; }
+        .error { color: #ef4444; font-weight: 600; }
+        .info { color: #f0f0f0; }
+        
+        code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔄 Extension Development Helper</h1>
+    <p>Run <code>npm run dev</code> in your terminal, then use these buttons:</p>
+    
+    <div>
+        <button onclick="reloadExtension()">🔄 Reload Extension</button>
+        <button onclick="openExtensionsPage()">⚙️ Open Extensions Page</button>
+        <button onclick="checkServiceWorker()">🔍 Check Service Worker</button>
+    </div>
+    
+    <div class="status" id="status">
+        <p class="info">Click a button to get started...</p>
+    </div>
+    
+    <script>
+        const status = document.getElementById('status');
+        
+        function setStatus(message, type = 'info') {
+            status.innerHTML = `<p class="${type}">${message}</p>`;
+        }
+        
+        async function reloadExtension() {
+            try {
+                setStatus('⏳ Attempting to reload extension...', 'info');
+                
+                // Try to send message to extension
+                chrome.runtime.sendMessage({ type: 'PING' }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        setStatus(`❌ Extension not responding. Go to <a href="chrome://extensions/" style="color: white;">chrome://extensions/</a> and click the reload icon.`, 'error');
+                        return;
+                    }
+                    
+                    // If extension responds, reload it
+                    chrome.runtime.reload();
+                    setStatus('✅ Extension reloaded! Refresh your test page (F5) to see changes.', 'success');
+                });
+            } catch (e) {
+                setStatus(`❌ Cannot access extension. Make sure it's loaded at <a href="chrome://extensions/" style="color: white;">chrome://extensions/</a>`, 'error');
+            }
+        }
+        
+        function openExtensionsPage() {
+            setStatus('📂 Opening chrome://extensions/ in new tab...', 'info');
+            chrome.tabs.create({ url: 'chrome://extensions/' });
+            setTimeout(() => {
+                setStatus('✅ Extensions page opened! Enable "Developer mode" and click "Load unpacked".', 'success');
+            }, 500);
+        }
+        
+        async function checkServiceWorker() {
+            try {
+                setStatus('🔍 Checking service worker status...', 'info');
+                
+                chrome.management.getSelf((info) => {
+                    if (info.enabled) {
+                        setStatus(`✅ Extension "${info.name}" is enabled and running!<br><small>Version: ${info.version}</small>`, 'success');
+                    } else {
+                        setStatus('⚠️ Extension is disabled. Enable it at chrome://extensions/', 'error');
+                    }
+                });
+            } catch (e) {
+                setStatus('❌ Cannot check status. This page may not have extension permissions.', 'error');
+            }
+        }
+        
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            setTimeout(checkServiceWorker, 500);
+        });
+    </script>
+</body>
+</html>

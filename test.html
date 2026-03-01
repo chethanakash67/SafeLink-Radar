@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Browser Risk Intelligence - Test Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            padding: 40px;
+            line-height: 1.8;
+            background: #f9fafb;
+            color: #1f2937;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #1f2937;
+            margin-bottom: 12px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 32px;
+            font-size: 16px;
+        }
+        
+        h2 {
+            color: #374151;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            font-size: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .risk-low { border-left: 4px solid #22c55e; }
+        .risk-medium { border-left: 4px solid #f59e0b; }
+        .risk-high { border-left: 4px solid #ef4444; }
+        
+        .link-group {
+            margin-bottom: 24px;
+            padding-left: 16px;
+        }
+        
+        a {
+            display: inline-block;
+            color: #3b82f6;
+            text-decoration: none;
+            padding: 12px 16px;
+            margin: 8px 8px 8px 0;
+            background: #eff6ff;
+            border-radius: 6px;
+            border: 1px solid #bfdbfe;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        a:hover {
+            background: #dbeafe;
+            border-color: #93c5fd;
+            transform: translateY(-1px);
+        }
+        
+        .expected {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .exp-low {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .exp-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .exp-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        #dynamic-links {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            min-height: 60px;
+        }
+        
+        #dynamic-links:empty::before {
+            content: 'No dynamic links added yet. Click the button above.';
+            color: #9ca3af;
+            font-style: italic;
+        }
+        
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .info-box h3 {
+            color: #1e40af;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .info-box p {
+            color: #1e3a8a;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .info-box ul {
+            margin-top: 12px;
+            padding-left: 20px;
+        }
+        
+        .info-box li {
+            color: #1e3a8a;
+            margin: 6px 0;
+        }
+        
+        code {
+            background: #1f2937;
+            color: #10b981;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 AI Browser Risk Intelligence</h1>
+        <p class="subtitle">Comprehensive Testing Page - Phase 1</p>
+        
+        <div class="info-box">
+            <h3>📋 How to Test (Updated UI)</h3>
+            <p><strong>Before you start:</strong> Make sure the extension is loaded and reloaded!</p>
+            <ul>
+                <li>✅ Load extension: chrome://extensions/ → Reload AI Browser Risk Intelligence</li>
+                <li>✅ Open DevTools (F12) to see console logs (DEBUG MODE enabled)</li>
+                <li>✅ Hover over links to see small risk score card</li>
+                <li>✅ Click the card to see full details panel</li>
+                <li>✅ Panel has 2 buttons: Continue Safely (new tab) or Take Risk (current tab)</li>
+            </ul>
+        </div>
+
+        <h2 class="risk-low">✅ Safe Links (Risk Score: 0-39%)</h2>
+        <div class="link-group">
+            <p><strong>Expected: Small card shows "0% LOW RISK" - click card for details</strong></p>
+            <a href="https://www.github.com">GitHub <span class="expected exp-low">~0%</span></a>
+            <a href="https://www.google.com">Google <span class="expected exp-low">~0%</span></a>
+            <a href="https://stackoverflow.com/questions">StackOverflow <span class="expected exp-low">~0%</span></a>
+            <a href="https://www.microsoft.com">Microsoft <span class="expected exp-low">~0%</span></a>
+            <a href="https://developer.mozilla.org">MDN Web Docs <span class="expected exp-low">~0%</span></a>
+        </div>
+
+        <h2 class="risk-medium">⚠️ Medium Risk Links (Score: 40-59%)</h2>
+        <div class="link-group">
+            <p><strong>Expected: Orange card with ~23-40% - click for reasons</strong></p>
+            <a href="https://example.info/update">Suspicious TLD (.info) <span class="expected exp-medium">~23%</span></a>
+            <a href="https://sub1.sub2.sub3.example.com">Multiple Subdomains <span class="expected exp-medium">~12%</span></a>
+            <a href="https://example.com/login/verify/account">Multiple Keywords <span class="expected exp-medium">~24%</span></a>
+            <a href="https://secure-banking.top">TLD + Keyword <span class="expected exp-medium">~31%</span></a>
+            <a href="https://example.com/very/long/path/with/many/segments/and/deep/nesting">Deep Path <span class="expected exp-medium">~8%</span></a>
+        </div>
+
+        <h2 class="risk-high">🚨 HIGH RISK Links (Score: 60%+)</h2>
+        <div class="link-group">
+            <p><strong>Expected: Red card with 60%+ score - click card to see panel with 2 options</strong></p>
+            <a href="http://192.168.1.1/login">Direct IP + Keyword <span class="expected exp-high">~33%</span></a>
+            <a href="http://192.168.1.1:8080/login-verify">IP + Port + Keywords <span class="expected exp-high">~68%</span></a>
+            <a href="http://secure-verify-account.xyz:8080/update">TLD + Port + Keywords <span class="expected exp-high">~73%</span></a>
+            <a href="http://paypal.verify.login.account.secure.update.top/confirm?session=abc&token=xyz&redirect=http://example.com">Maximum Risk Flags <span class="expected exp-high">~95%</span></a>
+            <a href="http://a.b.c.d.e.f.g.suspicious-domain.xyz:8080/verify/login/secure/account/update/banking/paypal?id=1&session=2&token=3&redirect=4&confirm=5&auth=6">Ultimate Risk Test <span class="expected exp-high">~100%</span></a>
+        </div>
+
+        <h2 class="risk-high">🔄 Dynamic Link Test (MutationObserver)</h2>
+        <div class="link-group">
+            <p><strong>Expected behavior:</strong> Newly added links should also be detected and show tooltips/interception</p>
+            <button onclick="addDangerousLink()">➕ Add High-Risk Link</button>
+            <button onclick="addSafeLink()">➕ Add Safe Link</button>
+            <button onclick="clearLinks()">🗑️ Clear All</button>
+            <div id="dynamic-links"></div>
+        </div>
+
+        <h2>🎯 Edge Cases & Special URLs</h2>
+        <div class="link-group">
+            <p><strong>Should be ignored (no tooltip/interception):</strong></p>
+            <a href="javascript:alert('Not analyzed')">JavaScript URL</a>
+            <a href="mailto:test@example.com">Mailto Link</a>
+            <a href="tel:+1234567890">Tel Link</a>
+            <a href="#section">Anchor Link</a>
+            <a href="data:text/html,<h1>Data URL</h1>">Data URL</a>
+        </div>
+
+        <h2>📊 What You Should See in Console</h2>
+        <div class="info-box">
+            <h3>Open DevTools (F12) → Console</h3>
+            <p><strong>On page load:</strong></p>
+            <ul>
+                <li>🚀 AI Risk Intelligence Extension - Content Script</li>
+                <li>🔍 Initializing link observer</li>
+                <li>📊 Found XX existing links</li>
+                <li>✅ Content script initialized successfully</li>
+            </ul>
+            <p><strong>On hover:</strong></p>
+            <ul>
+                <li>📤 Sending message to background</li>
+                <li>📥 Received response from background</li>
+            </ul>
+            <p><strong>On high-risk click:</strong></p>
+            <ul>
+                <li>🚨 High-risk link clicked</li>
+                <li>URL: [the dangerous URL]</li>
+                <li>Score: [the risk score]</li>
+            </ul>
+        </div>
+
+        <h2>✅ Success Checklist</h2>
+        <div class="info-box">
+            <ul>
+                <li>✅ Extension loaded without errors in chrome://extensions/</li>
+                <li>✅ Console shows initialization messages</li>
+                <li>✅ Safe links show green LOW RISK tooltips</li>
+                <li>✅ Medium links show orange MEDIUM RISK tooltips</li>
+                <li>✅ High-risk links show red HIGH RISK tooltips</li>
+                <li>✅ Clicking high-risk links shows Safety Panel</li>
+                <li>✅ Safety Panel has 4 buttons (View Details, Open in New Tab, Continue Anyway, X)</li>
+                <li>✅ All panel buttons work correctly</li>
+                <li>✅ Dynamic links are detected after being added</li>
+                <li>✅ Special URLs (javascript:, mailto:) are ignored</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let linkCounter = 0;
+
+        function addDangerousLink() {
+            linkCounter++;
+            const div = document.getElementById('dynamic-links');
+            const link = document.createElement('a');
+            link.href = `http://192.168.1.${linkCounter}:8080/verify-login-secure-account-${linkCounter}`;
+            link.textContent = `Dangerous Link #${linkCounter}`;
+            link.style.marginTop = '8px';
+            
+            const badge = document.createElement('span');
+            badge.className = 'expected exp-high';
+            badge.textContent = '~70%+';
+            link.appendChild(badge);
+            
+            div.appendChild(link);
+            div.appendChild(document.createElement('br'));
+            
+            console.log('Added dangerous link:', link.href);
+        }
+
+        function addSafeLink() {
+            linkCounter++;
+            const div = document.getElementById('dynamic-links');
+            const link = document.createElement('a');
+            link.href = `https://example.com/page-${linkCounter}`;
+            link.textContent = `Safe Link #${linkCounter}`;
+            link.style.marginTop = '8px';
+            
+            const badge = document.createElement('span');
+            badge.className = 'expected exp-low';
+            badge.textContent = '~0%';
+            link.appendChild(badge);
+            
+            div.appendChild(link);
+            div.appendChild(document.createElement('br'));
+            
+            console.log('Added safe link:', link.href);
+        }
+
+        function clearLinks() {
+            const div = document.getElementById('dynamic-links');
+            div.innerHTML = '';
+            linkCounter = 0;
+            console.log('Cleared all dynamic links');
+        }
+
+        // Log page ready
+        console.log('🧪 Test page loaded. Extension should now analyze all links.');
+        console.log('📝 Open the extension service worker console to see background logs:');
+        console.log('   chrome://extensions/ → AI Browser Risk Intelligence → Service worker');
+    </script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Malicious Link Test Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      padding: 24px;
+      color: #e4e4e7;
+      background: #0a0a0a;
+    }
+    h1 { margin-top: 0; }
+    .section { margin-bottom: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #27272a; }
+    .tag {
+      display:inline-block;
+      padding: 2px 6px;
+      border-radius: 0;
+      border: 1px solid #3f3f46;
+      font-size: 12px;
+      margin-left: 8px;
+      background: #111111;
+      color: #d4d4d8;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benign { border-color: #52525b; }
+    .malicious { border-color: #f4f4f5; color: #f4f4f5; }
+    .suspicious { border-color: #71717a; color: #e4e4e7; }
+    .action { border-color: #a1a1aa; color: #f4f4f5; }
+    .note { color:#a1a1aa; font-size:90%; }
+    a.test-link {
+      color: #f4f4f5;
+      text-decoration-color: #71717a;
+      word-break: break-all;
+    }
+    a.test-link:hover {
+      color: #ffffff;
+      text-decoration-color: #ffffff;
+    }
+    #log {
+      white-space: pre-wrap;
+      background:#111111;
+      color: #d4d4d8;
+      padding:12px;
+      border-radius:0;
+      border:1px solid #27272a;
+      max-height:220px;
+      overflow:auto;
+    }
+    textarea {
+      background: #111111;
+      color: #d4d4d8;
+      border: 1px solid #3f3f46;
+      border-radius: 0;
+    }
+    code {
+      background: #111111;
+      border: 1px solid #3f3f46;
+      padding: 1px 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Risk Recommendation Test Matrix</h1>
+  <p class="note">Use this page to test risk-specific safer actions. Links do not navigate from this test page. For each case, check that your extension suggests the expected best action for that specific signal profile.</p>
+
+  <div class="section">
+    <h2>Control Cases (Safe / Low Risk) <span class="tag benign">control</span></h2>
+    <table>
+      <thead>
+        <tr><th>URL</th><th>Primary Signal</th><th>Expected Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a class="test-link" href="https://www.google.com/" data-expected="low" data-expected-action="Continue with Safety (Incognito)">https://www.google.com/</a></td>
+          <td>No suspicious features</td>
+          <td><span class="tag action">incognito fallback</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="https://github.com/" data-expected="low" data-expected-action="Continue with Safety (Incognito)">https://github.com/</a></td>
+          <td>No suspicious features</td>
+          <td><span class="tag action">incognito fallback</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Scan-First Cases <span class="tag suspicious">ip/tld/port</span></h2>
+    <table>
+      <thead>
+        <tr><th>URL</th><th>Primary Signal</th><th>Expected Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a class="test-link" href="http://192.0.2.123/login.php?session=abc123" data-expected="high" data-expected-action="Scan Link First (Recommended)">http://192.0.2.123/login.php?session=abc123</a></td>
+          <td>IP address as host</td>
+          <td><span class="tag action">scan first</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="http://billing-alert.secure-pay.xyz/verify" data-expected="high" data-expected-action="Scan Link First (Recommended)">http://billing-alert.secure-pay.xyz/verify</a></td>
+          <td>Suspicious TLD (.xyz)</td>
+          <td><span class="tag action">scan first</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="http://example.com:8080/auth" data-expected="medium" data-expected-action="Scan Link First (Recommended)">http://example.com:8080/auth</a></td>
+          <td>Non-standard port</td>
+          <td><span class="tag action">scan first</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Verify-Domain-First Cases <span class="tag suspicious">obfuscation</span></h2>
+    <table>
+      <thead>
+        <tr><th>URL</th><th>Primary Signal</th><th>Expected Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a class="test-link" href="http://secure-login.example.com/login?user=alice" data-expected="medium" data-expected-action="Verify Domain First (Recommended)">http://secure-login.example.com/login?user=alice</a></td>
+          <td>Suspicious keywords + fake login path</td>
+          <td><span class="tag action">verify domain first</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="http://login.account.verify.security.alert.example.com/auth" data-expected="high" data-expected-action="Verify Domain First (Recommended)">http://login.account.verify.security.alert.example.com/auth</a></td>
+          <td>Many subdomains + suspicious terms</td>
+          <td><span class="tag action">verify domain first</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="http://a.b.c.d.e.f.g.example.com/path" data-expected="high" data-expected-action="Verify Domain First (Recommended)">http://a.b.c.d.e.f.g.example.com/path</a></td>
+          <td>Many dots / subdomain stacking</td>
+          <td><span class="tag action">verify domain first</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="http://very.long.subdomain.with.lots.of.parts.example.com/path/to/resource?param=1&token=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&session=BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB#fragment" data-expected="high" data-expected-action="Verify Domain First (Recommended)">http://very.long.subdomain.with.lots.of.parts.example.com/path/to/resource?param=1&token=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&session=BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB#fragment</a></td>
+          <td>Long URL + complex host</td>
+          <td><span class="tag action">verify domain first</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Download Risk Cases <span class="tag action">downloads</span></h2>
+    <table>
+      <thead>
+        <tr><th>URL</th><th>Primary Signal</th><th>Expected Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a class="test-link" href="https://example.com/files/notes.txt" data-expected="low" data-expected-action="Allow Download (&lt;30%)" download>https://example.com/files/notes.txt</a></td>
+          <td>Low-risk text file download</td>
+          <td><span class="tag benign">allow download</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="http://downloads.example.com/tools/setup.exe" data-expected="high" data-expected-action="Scan File Link">http://downloads.example.com/tools/setup.exe</a></td>
+          <td>Executable over HTTP</td>
+          <td><span class="tag action">scan / incognito / risk</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="http://198.51.100.42/crack/keygen-tool.zip" data-expected="high" data-expected-action="Scan File Link">http://198.51.100.42/crack/keygen-tool.zip</a></td>
+          <td>IP host + crack/keygen keywords + archive</td>
+          <td><span class="tag action">scan / incognito / risk</span></td>
+        </tr>
+        <tr>
+          <td><a class="test-link" href="https://cdn.example.org/statement.pdf.exe" data-expected="high" data-expected-action="Scan File Link">https://cdn.example.org/statement.pdf.exe</a></td>
+          <td>Double extension (disguised executable)</td>
+          <td><span class="tag action">scan / incognito / risk</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Very High Risk (Do Not Open) <span class="tag malicious">critical</span></h2>
+    <table>
+      <thead>
+        <tr><th>URL</th><th>Primary Signal</th><th>Expected Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a class="test-link" href="http://198.51.100.77:8080/account/secure/verify/login/update/password?session=abc123&token=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" data-expected="very-high" data-expected-action="Do Not Open (Recommended)">http://198.51.100.77:8080/account/secure/verify/login/update/password?session=abc123&token=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</a></td>
+          <td>IP + non-standard port + keywords + long URL</td>
+          <td><span class="tag action">do not open</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Edge Cases / Non-HTTP</h2>
+    <table>
+      <thead>
+        <tr><th>URL</th><th>Primary Signal</th><th>Expected Action</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><a class="test-link" href="mailto:admin@example.com" data-expected="low" data-expected-action="No block / normal handling">mailto:admin@example.com</a></td><td>Mailto link</td><td><span class="tag benign">ignore</span></td></tr>
+        <tr><td><a class="test-link" href="tel:+1234567890" data-expected="low" data-expected-action="No block / normal handling">tel:+1234567890</a></td><td>Telephone link</td><td><span class="tag benign">ignore</span></td></tr>
+        <tr><td><a class="test-link" href="javascript:void(0)" data-expected="low" data-expected-action="No block / normal handling">javascript:void(0)</a></td><td>JS pseudo-link</td><td><span class="tag benign">ignore</span></td></tr>
+        <tr><td><a class="test-link" href="//cdn.example.com/assets/script.js" data-expected="low" data-expected-action="Continue with Safety (Incognito)">//cdn.example.com/assets/script.js</a></td><td>Protocol-relative URL</td><td><span class="tag action">incognito fallback</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Bulk URLs (One From Each Action Group)</h2>
+    <p class="note">Use this textarea to copy multiple sample URLs for batch testing (one URL per line).</p>
+    <textarea id="bulk" rows="10" style="width:100%; font-family: monospace;">https://www.google.com/
+http://192.0.2.123/login.php?session=abc123
+http://billing-alert.secure-pay.xyz/verify
+http://example.com:8080/auth
+http://secure-login.example.com/login?user=alice
+http://login.account.verify.security.alert.example.com/auth
+http://a.b.c.d.e.f.g.example.com/path
+https://example.com/files/notes.txt
+http://downloads.example.com/tools/setup.exe
+http://198.51.100.42/crack/keygen-tool.zip
+https://cdn.example.org/statement.pdf.exe
+http://very.long.subdomain.with.lots.of.parts.example.com/path/to/resource?param=1&token=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&session=BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB#fragment
+http://198.51.100.77:8080/account/secure/verify/login/update/password?session=abc123&token=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+</textarea>
+  </div>
+
+  <div class="section">
+    <h2>Interaction log</h2>
+    <div id="log">Click a link to show its href and expected label here.
+</div>
+  </div>
+
+  <script>
+    function log(msg) {
+      const el = document.getElementById('log');
+      const now = new Date().toISOString();
+      el.textContent = now + ' - ' + msg + '\n' + el.textContent;
+    }
+
+    function handleClick(e) {
+      const a = e.currentTarget;
+      const href = a.getAttribute('href');
+      const expected = a.getAttribute('data-expected') || 'unknown';
+      const expectedAction = a.getAttribute('data-expected-action') || 'unknown';
+      const shouldAllowOpen = expected === 'low';
+
+      log(
+        'LINK CLICKED: ' + href +
+        '  (expected risk: ' + expected +
+        ', expected action: ' + expectedAction +
+        ', open allowed: ' + (shouldAllowOpen ? 'yes' : 'no') + ')'
+      );
+
+      // For testing: low-risk links are allowed to open.
+      // Medium/high/very-high links remain blocked so you can inspect behavior safely.
+      if (!shouldAllowOpen) {
+        e.preventDefault();
+        return false;
+      }
+
+      return true;
+    }
+
+    document.querySelectorAll('a.test-link').forEach(a => {
+      a.addEventListener('click', handleClick);
+    });
+
+    // Friendly note: extensions will still be able to inspect the link hrefs in the DOM
+    // even though clicking here does not navigate. This keeps testing safe while letting
+    // your extension read and score the links.
+  </script>
+</body>
+</html>

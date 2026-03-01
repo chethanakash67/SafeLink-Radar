@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "AI Browser Risk Intelligence",
+  "version": "1.0.0",
+  "description": "Browser-level security extension for link risk intelligence",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "windows"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["assets/tooltip.css", "assets/panel.css"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  },
+  "host_permissions": []
+}

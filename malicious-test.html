@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Malicious Link Test Examples</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 40px; 
+            background: #1a1a1a; 
+            color: #fff;
+        }
+        h1 { color: #ef4444; }
+        h2 { color: #f59e0b; margin-top: 30px; }
+        a { 
+            display: block; 
+            margin: 10px 0; 
+            padding: 10px; 
+            background: #2a2a2a; 
+            border-left: 4px solid #ef4444;
+            text-decoration: none;
+            color: #60a5fa;
+        }
+        a:hover { background: #3a3a3a; }
+        .category { 
+            background: #2a2a2a; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 8px;
+        }
+        .score { 
+            color: #ef4444; 
+            font-weight: bold; 
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚨 Malicious Link Test Suite</h1>
+    <p>Hover over these links to test the extension. DO NOT CLICK THEM.</p>
+
+    <div class="category">
+        <h2>1. IP-Based Phishing (Very High Risk)</h2>
+        <a href="http://192.168.1.1/admin/login">http://192.168.1.1/admin/login <span class="score">~33%</span></a>
+        <a href="http://10.0.0.1:8080/verify">http://10.0.0.1:8080/verify <span class="score">~43%</span></a>
+        <a href="http://172.16.0.1:3000/banking/secure">http://172.16.0.1:3000/banking/secure <span class="score">~76%</span></a>
+        <a href="http://203.0.113.0:8888/paypal-login">http://203.0.113.0:8888/paypal-login <span class="score">~91%</span></a>
+    </div>
+
+    <div class="category">
+        <h2>2. Suspicious TLD Phishing</h2>
+        <a href="http://secure-banking.xyz">http://secure-banking.xyz <span class="score">~31%</span></a>
+        <a href="http://paypal-verify.top/account">http://paypal-verify.top/account <span class="score">~47%</span></a>
+        <a href="http://amazon-login.tk/verify">http://amazon-login.tk/verify <span class="score">~47%</span></a>
+        <a href="http://microsoft-update.ml/security">http://microsoft-update.ml/security <span class="score">~47%</span></a>
+        <a href="http://google-verify.ga/account">http://google-verify.ga/account <span class="score">~47%</span></a>
+    </div>
+
+    <div class="category">
+        <h2>3. Keyword Stuffing Attacks</h2>
+        <a href="http://secure-banking-login-verify-account.com">http://secure-banking-login-verify-account.com <span class="score">~24%</span></a>
+        <a href="http://paypal-secure-login-verify-update.net">http://paypal-secure-login-verify-update.net <span class="score">~24%</span></a>
+        <a href="http://example.com/login/verify/secure/account/update">http://example.com/login/verify/secure/account/update <span class="score">~24%</span></a>
+    </div>
+
+    <div class="category">
+        <h2>4. Typosquatting Examples</h2>
+        <a href="http://gooogle.com">http://gooogle.com (Google typo) <span class="score">~0%</span></a>
+        <a href="http://amaz0n.com">http://amaz0n.com (Amazon with 0) <span class="score">~0%</span></a>
+        <a href="http://paypa1.com">http://paypa1.com (PayPal with 1) <span class="score">~0%</span></a>
+    </div>
+
+    <div class="category">
+        <h2>5. Multiple Red Flags Combined</h2>
+        <a href="http://192.168.1.100:8080/secure-banking-login-verify-account-update.php?redirect=http://evil.com&session=abc123&token=xyz789&confirm=true">
+            Ultimate phishing attempt (IP + Port + Keywords + Deep path + Query params) <span class="score">~100%</span>
+        </a>
+        <a href="http://secure.verify.login.account.paypal.update.banking.top:8080/confirm?id=1&session=2&redirect=3">
+            Multi-subdomain + suspicious TLD + port + keywords <span class="score">~95%</span>
+        </a>
+    </div>
+
+    <div class="category">
+        <h2>6. Real-World Phishing Patterns</h2>
+        <a href="http://paypal-resolution-center.xyz/verify-account">PayPal Resolution Center Fake <span class="score">~55%</span></a>
+        <a href="http://appleid-locked.top/unlock-account">Apple ID Locked Fake <span class="score">~47%</span></a>
+        <a href="http://amazon-account-suspended.tk/verify">Amazon Suspended Fake <span class="score">~63%</span></a>
+        <a href="http://microsoft-security-update.ml/urgent">Microsoft Security Fake <span class="score">~47%</span></a>
+    </div>
+
+    <div class="category">
+        <h2>7. Legitimate Sites for Comparison</h2>
+        <a href="https://www.paypal.com">https://www.paypal.com (Real PayPal) <span class="score" style="color: #22c55e;">~0%</span></a>
+        <a href="https://www.amazon.com">https://www.amazon.com (Real Amazon) <span class="score" style="color: #22c55e;">~0%</span></a>
+        <a href="https://appleid.apple.com">https://appleid.apple.com (Real Apple) <span class="score" style="color: #22c55e;">~0%</span></a>
+        <a href="https://account.microsoft.com">https://account.microsoft.com (Real Microsoft) <span class="score" style="color: #22c55e;">~0%</span></a>
+    </div>
+
+    <div class="category">
+        <h2>8. Advanced Evasion Techniques</h2>
+        <a href="http://www.paypal.com.verify-account.xyz">Subdomain spoofing <span class="score">~31%</span></a>
+        <a href="http://login@phishing-site.top">Username in URL trick <span class="score">~31%</span></a>
+        <a href="http://example.com/../../../etc/passwd">Path traversal pattern <span class="score">~8%</span></a>
+    </div>
+
+    <script>
+        console.log('🧪 Malicious Link Test Page Loaded');
+        console.log('Hover over any link to see risk assessment');
+        console.log('Extension should show risk scores in tooltips');
+        
+        // Count links
+        const links = document.querySelectorAll('a');
+        console.log(`Total test links: ${links.length}`);
+    </script>
+</body>
+</html>
