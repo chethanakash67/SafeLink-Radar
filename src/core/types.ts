@@ -22,6 +22,10 @@ export interface URLFeatures {
 
 export interface RiskAnalysisResult {
   score: number;
+  /** Raw rule-based score (0-100) before ML blending */
+  ruleScore: number;
+  /** ML model malicious probability scaled 0-100, or -1 if unavailable */
+  mlScore: number;
   reasons: string[];
   features: URLFeatures;
   timestamp: number;

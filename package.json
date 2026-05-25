@@ -11,7 +11,13 @@
     "build:background": "vite build --config vite.config.background.ts",
     "build:content": "vite build --config vite.config.content.ts",
     "type-check": "tsc --noEmit",
-    "generate-icons": "node scripts/generate-icons.js"
+    "generate-icons": "node scripts/generate-icons.js",
+    "ml:setup": "pip install -r ml/requirements.txt",
+    "ml:train": "cd ml && python train.py",
+    "ml:validate": "cd ml && python validate_model.py"
+  },
+  "dependencies": {
+    "onnxruntime-web": "^1.24.3"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.260",

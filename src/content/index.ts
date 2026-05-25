@@ -55,7 +55,13 @@ function cleanup(): void {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
-  init();
+  // On some special pages (PDF viewer, chrome-extension://) the body may
+  // not exist yet even when readyState is 'complete'. Defer one tick.
+  if (document.body) {
+    init();
+  } else {
+    requestAnimationFrame(init);
+  }
 }
 
 // Cleanup on page unload

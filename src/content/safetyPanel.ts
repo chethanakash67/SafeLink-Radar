@@ -27,10 +27,10 @@ export function showSafetyPanel(url: string, result: RiskAnalysisResult): Promis
 
     panelResolve = resolve;
     currentPanel = createPanelElement(url, result);
-    document.body.appendChild(currentPanel);
+    (document.body ?? document.documentElement).appendChild(currentPanel);
 
     // Prevent background scrolling
-    document.body.style.overflow = 'hidden';
+    if (document.body) document.body.style.overflow = 'hidden';
   });
 }
 
@@ -42,7 +42,7 @@ export function removeSafetyPanel(): void {
     removeElement(currentPanel);
     currentPanel = null;
     panelResolve = null;
-    document.body.style.overflow = '';
+    if (document.body) document.body.style.overflow = '';
   }
 }
 
@@ -310,7 +310,7 @@ function createSafeStepsSection(url: string): HTMLElement {
       } else {
         const ta = document.createElement('textarea');
         ta.value = url;
-        document.body.appendChild(ta);
+        (document.body ?? document.documentElement).appendChild(ta);
         ta.select();
         document.execCommand('copy');
         ta.remove();

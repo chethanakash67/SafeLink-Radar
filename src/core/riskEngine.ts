@@ -2,27 +2,80 @@
 // Copyright (c) 2026 chethanakash67
 
 /**
- * Risk Scoring Engine - Weighted Feature Scoring
- * Pure function - takes features, returns risk assessment
- * 
+ * Risk Scoring Engine - Weighted Feature Scoring + ML Blending
+ *
  * CALCULATION METHOD:
- * 1. Normalize each feature to 0.0-1.0 scale (based on severity)
- * 2. Multiply normalized value × weight
- * 3. Sum all products: Σ(feature_value × weight)
- * 4. Convert to percentage (× 100)
- * 
- * Example:
- *   URL Length = 150 chars → normalized = 0.65 → 0.65 × 0.03 = 0.0195
- *   IP Address = true → normalized = 1.0 → 1.0 × 0.30 = 0.30
- *   Keywords = 3 → normalized = 0.6 → 0.6 × 0.20 = 0.12
- *   Total = 0.0195 + 0.30 + 0.12 = 0.4395 → 43.95%
+ * 1. Rule-based score: Σ(normalized_feature × weight) × 100  (0-100)
+ * 2. ML score: RandomForest malicious probability × 100       (0-100)
+ * 3. Blended score: 0.45 × rule + 0.55 × ml  (when ML available)
+ *                   falls back to rule-only when ML unavailable
  */
 
 import type { URLFeatures, RiskAnalysisResult } from './types';
 import { FEATURE_WEIGHTS, NORMALIZATION, RISK_THRESHOLD } from './constants';
+import { runMLInference } from './mlModel';
 
 /**
- * Calculate risk score using weighted feature scoring
+ * Blend weights — ML carries slightly more weight when available.
+ * Tune these to taste after evaluating on real traffic.
+ */
+const ML_WEIGHT   = 0.55;
+const RULE_WEIGHT = 0.45;
+
+/**
+ * Async version: runs rule-based scoring AND ML inference, then blends.
+ * Use this in background.ts / messagingService where async is fine.
+ */
+export async function calculateRiskAsync(
+  features: URLFeatures,
+  url: string,
+): Promise<RiskAnalysisResult> {
+  const ruleResult = calculateRisk(features);
+  const mlResult   = await runMLInference(features, url);
+
+  let finalScore: number;
+  const mlScore = mlResult.mlScore;
+
+  if (mlResult.modelAvailable && mlScore >= 0) {
+    const reasons = [...ruleResult.reasons];
+
+    if (mlScore === 0) {
+      // Model is confident this is benign — trust rule engine but soften it slightly
+      finalScore = Math.min(100, Math.max(0, ruleResult.score * 0.75));
+    } else if (mlScore === 100) {
+      // Model is highly confident malicious — take the maximum of both
+      finalScore = Math.max(ruleResult.score, 85);
+      reasons.unshift(`🤖 ML model is highly confident this URL is malicious`);
+    } else {
+      // Partial ML signal — weighted blend
+      finalScore = Math.min(
+        100,
+        Math.max(0, RULE_WEIGHT * ruleResult.score + ML_WEIGHT * mlScore),
+      );
+      // Only annotate if ML diverges significantly from rule score
+      const delta = mlScore - ruleResult.score;
+      if (delta > 25) {
+        reasons.unshift(`🤖 ML model flags elevated risk (${mlScore}% confidence)`);
+      }
+    }
+
+    return {
+      score: Math.round(finalScore),
+      ruleScore: Math.round(ruleResult.score),
+      mlScore: Math.round(mlScore),
+      reasons: prioritizeReasons(reasons, finalScore),
+      features,
+      timestamp: Date.now(),
+    };
+  }
+
+  // ML unavailable — return rule-based result with mlScore = -1
+  return { ...ruleResult, mlScore: -1 };
+}
+
+/**
+ * Synchronous rule-based scorer (used as fallback & internally).
+ * calculateRiskAsync is preferred when you need ML.
  */
 export function calculateRisk(features: URLFeatures): RiskAnalysisResult {
   const reasons: string[] = [];
@@ -149,6 +202,8 @@ export function calculateRisk(features: URLFeatures): RiskAnalysisResult {
 
   return {
     score: finalScore,
+    ruleScore: finalScore,
+    mlScore: -1,
     reasons: prioritizeReasons(reasons, finalScore),
     features,
     timestamp: Date.now(),

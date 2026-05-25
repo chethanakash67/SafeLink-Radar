@@ -1,0 +1,35 @@
+{
+  "feature_names": [
+    "url_length",
+    "dot_count",
+    "subdomain_count",
+    "has_ip_address",
+    "suspicious_keyword_count",
+    "suspicious_tld",
+    "has_suspicious_port",
+    "path_depth",
+    "query_param_count",
+    "https",
+    "digit_ratio",
+    "hyphen_count",
+    "at_symbol",
+    "double_slash_in_path",
+    "brand_squatting",
+    "entropy"
+  ],
+  "n_features": 16,
+  "n_estimators": 100,
+  "max_depth": 8,
+  "test_accuracy": 0.814,
+  "test_auc": 0.8835,
+  "cv_auc_mean": 0.883,
+  "cv_auc_std": 0.0015,
+  "classes": [
+    "benign",
+    "malicious"
+  ],
+  "output_index_malicious": 1,
+  "model_file": "model.onnx",
+  "scaler_file": "scaler.json",
+  "trained_on": "2026-03-10 14:42:22.753215"
+}

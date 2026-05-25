@@ -92,7 +92,7 @@ export function initLinkObserver(): void {
   }
 
   // Listen for safety panel requests from tooltip clicks
-  document.addEventListener('ai-show-safety-panel', ((e: CustomEvent) => {
+  document.addEventListener('ai-show-safety-panel', ((_e: CustomEvent) => {
     if (currentLinkData) {
       showSafetyPanel(currentLinkData.url, currentLinkData.result);
     }
@@ -131,8 +131,15 @@ export function initLinkObserver(): void {
     }
   });
 
-  // Start observing
-  observer.observe(document.body, {
+  // Start observing — document.body can be null on special pages (PDFs, chrome://, etc.)
+  const observeTarget = document.body ?? document.documentElement;
+  if (!observeTarget) {
+    if (DEBUG_MODE) {
+      console.warn('No observable DOM node found — link observer not started');
+    }
+    return;
+  }
+  observer.observe(observeTarget, {
     childList: true,
     subtree: true,
   });
@@ -266,7 +273,7 @@ async function handleMouseEnter(event: MouseEvent): Promise<void> {
       // Limit cache size
       if (preloadCache.size > 100) {
         const firstKey = preloadCache.keys().next().value;
-        preloadCache.delete(firstKey);
+        if (firstKey !== undefined) preloadCache.delete(firstKey);
       }
       
       // Store current link data for safety panel
@@ -360,7 +367,7 @@ async function handleActionMouseEnter(event: MouseEvent): Promise<void> {
 
       if (preloadCache.size > 100) {
         const firstKey = preloadCache.keys().next().value;
-        preloadCache.delete(firstKey);
+        if (firstKey !== undefined) preloadCache.delete(firstKey);
       }
 
       currentLinkData = { url, result };
@@ -783,7 +790,7 @@ async function copyToClipboard(text: string): Promise<boolean> {
     ta.value = text;
     ta.style.position = 'fixed';
     ta.style.opacity = '0';
-    document.body.appendChild(ta);
+    (document.body ?? document.documentElement).appendChild(ta);
     ta.select();
     document.execCommand('copy');
     ta.remove();
@@ -923,7 +930,7 @@ function showDownloadRiskConfirmation(url: string, result: DownloadRiskResult): 
   `;
 
   overlay.appendChild(dialog);
-  document.body.appendChild(overlay);
+  (document.body ?? document.documentElement).appendChild(overlay);
 
   const scanBtn = dialog.querySelector('#ai-download-scan') as HTMLButtonElement;
   const incognitoBtn = dialog.querySelector('#ai-download-incognito') as HTMLButtonElement;
@@ -1091,7 +1098,7 @@ function showRiskConfirmation(url: string, result: RiskAnalysisResult): void {
   `;
 
   overlay.appendChild(dialog);
-  document.body.appendChild(overlay);
+  (document.body ?? document.documentElement).appendChild(overlay);
 
   // Add hover effects
   const safeBtn = dialog.querySelector('#ai-continue-safely') as HTMLButtonElement;

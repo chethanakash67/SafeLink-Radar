@@ -7,7 +7,7 @@
  */
 
 import { analyzeURL } from '../core/urlAnalyzer';
-import { calculateRisk } from '../core/riskEngine';
+import { calculateRiskAsync } from '../core/riskEngine';
 import { cacheService } from '../services/cacheService';
 import {
   isValidMessage,
@@ -145,7 +145,7 @@ async function handleAnalyzeURL(message: AnalyzeURLMessage): Promise<any> {
     }
 
     const features = analyzeURL(url);
-    const result = calculateRisk(features);
+    const result = await calculateRiskAsync(features, url);
 
     if (DEBUG_MODE) {
       console.log('Score:', result.score);

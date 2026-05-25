@@ -89,7 +89,7 @@ export function showTooltip(
 
   // Show immediately - no delay
   currentTooltip = createTooltipElement(result);
-  document.body.appendChild(currentTooltip);
+  (document.body ?? document.documentElement).appendChild(currentTooltip);
   positionTooltip(currentTooltip, mouseX, mouseY);
 }
 
